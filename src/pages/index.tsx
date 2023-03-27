@@ -1,10 +1,11 @@
 import type { SubmitHandler } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input } from '@/components/ui';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Input } from '@/components/ui';
 
 const loginSchema = z.object({
   email: z
@@ -14,13 +15,14 @@ const loginSchema = z.object({
   password: z
     .string()
     .nonempty('Please enter password')
-    .min(8, `Password can't be less than 8 characters long`)
-    .max(50, `Password can't be more than 50 characters long `),
+    .min(6, `Password must be at least 6 characters long`)
+    .max(50, `Password can't be more than 50 characters long`),
 });
 
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
 export default function Home() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -30,7 +32,7 @@ export default function Home() {
   });
 
   const onSubmit: SubmitHandler<LoginSchemaType> = values =>
-    console.log(values);
+    router.push('/dashboard');
 
   return (
     <>
