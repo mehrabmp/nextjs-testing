@@ -24,6 +24,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <span
             className="text-xs font-normal text-red-600"
             data-cy="error-message"
+            data-testid="error-message"
           >
             {error}
           </span>

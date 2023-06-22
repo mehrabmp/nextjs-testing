@@ -63,7 +63,7 @@ export default function Home() {
             />
           </div>
           <div className="space-y-1">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label htmlFor="password" className="text-sm font-medium">
               Password
             </label>
             <Input
