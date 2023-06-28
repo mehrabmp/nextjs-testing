@@ -37,7 +37,7 @@ test.describe('Login', () => {
 });
 
 async function login(page: Page, email: string, password: string) {
-  await page.getByRole('textbox', { name: 'email' }).type(email);
-  await page.getByRole('textbox', { name: 'password' }).type(password);
+  await page.getByRole('textbox', { name: 'email' }).fill(email);
+  await page.getByRole('textbox', { name: 'password' }).fill(password);
   await page.getByRole('button', { name: 'Sign in' }).click();
 }

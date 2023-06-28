@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "playwright": "playwright test",
+    "playwright:debug": "playwright test --debug",
+    "playwright:report": "playwright show-report",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.11",
