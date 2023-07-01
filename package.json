@@ -10,7 +10,9 @@
     "playwright": "playwright test",
     "playwright:debug": "playwright test --debug",
     "playwright:report": "playwright show-report",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "test:dev": "start-server-and-test dev http://127.0.0.1:3000 playwright",
+    "test:prod": "start-server-and-test start http://127.0.0.1:3000 playwright"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.11",
