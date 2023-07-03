@@ -7,7 +7,7 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@/components/ui';
 
-const loginSchema = z.object({
+export const loginSchema = z.object({
   email: z
     .string()
     .nonempty('Please enter email address')
