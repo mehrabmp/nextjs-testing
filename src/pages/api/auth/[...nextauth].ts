@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GithubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { loginSchema } from '@/pages';
 import { prisma } from '@/server/db';
@@ -9,13 +8,8 @@ import bcrypt from 'bcrypt';
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    GithubProvider({
-      clientId: 'qerew',
-      clientSecret: 'asd',
-    }),
     CredentialsProvider({
       id: 'sign-in',
-      name: 'Sign in',
       credentials: {
         email: {
           label: 'Email',

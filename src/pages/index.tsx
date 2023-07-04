@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@/components/ui';
+import { signIn } from 'next-auth/react';
 
 export const loginSchema = z.object({
   email: z
@@ -31,8 +32,16 @@ export default function Home() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginSchemaType> = values =>
-    router.push('/dashboard');
+  const onSubmit: SubmitHandler<LoginSchemaType> = async values => {
+    const status = await signIn('sign-in', {
+      callbackUrl: '/dashboard',
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    });
+
+    console.log(status);
+  };
 
   return (
     <>
