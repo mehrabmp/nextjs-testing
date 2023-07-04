@@ -34,13 +34,13 @@ export default function Home() {
 
   const onSubmit: SubmitHandler<LoginSchemaType> = async values => {
     const status = await signIn('sign-in', {
-      callbackUrl: '/dashboard',
       redirect: false,
       email: values.email,
       password: values.password,
     });
 
     console.log(status);
+    if (status?.ok) router.push('/dashboard');
   };
 
   return (
@@ -98,7 +98,7 @@ export default function Home() {
           <Button type="submit">Sign in</Button>
           <h3 className="text-center text-sm font-medium">
             Don&apos;t have an account?{' '}
-            <Link href={''} className="text-blue-500">
+            <Link href={'/signup'} className="text-blue-500">
               Sign up
             </Link>
           </h3>
