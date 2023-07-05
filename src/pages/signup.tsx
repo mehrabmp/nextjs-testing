@@ -1,12 +1,14 @@
+import type { SubmitHandler } from 'react-hook-form';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import z from 'zod';
-import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input } from '@/components/ui';
 import { signIn } from 'next-auth/react';
+import { Button, Input } from '@/components/ui';
+import { Loader } from '@/components/ui/loader';
 
 export const signupSchema = z.object({
   name: z.string().nonempty('Please enter your name'),
@@ -33,7 +35,11 @@ export default function Signup() {
     resolver: zodResolver(signupSchema),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit: SubmitHandler<SignupSchemaType> = async values => {
+    setIsLoading(true);
+
     const status = await signIn('sign-up', {
       callbackUrl: '/dashboard',
       redirect: false,
@@ -41,6 +47,8 @@ export default function Signup() {
       email: values.email,
       password: values.password,
     });
+
+    setIsLoading(false);
 
     if (status?.ok) router.push('/dashboard');
   };
@@ -94,7 +102,10 @@ export default function Signup() {
               {...register('password')}
             />
           </div>
-          <Button type="submit">Sign up</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader size="sm" className="mr-2" />}
+            Sign up
+          </Button>
           <h3 className="text-center text-sm font-medium">
             You have already an account?{' '}
             <Link href={'/signin'} className="text-blue-500">

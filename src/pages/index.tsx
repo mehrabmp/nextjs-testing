@@ -1,12 +1,14 @@
 import type { SubmitHandler } from 'react-hook-form';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
 import z from 'zod';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input } from '@/components/ui';
 import { signIn } from 'next-auth/react';
+import { Button, Input } from '@/components/ui';
+import { Loader } from '@/components/ui/loader';
 
 export const loginSchema = z.object({
   email: z
@@ -32,14 +34,19 @@ export default function Home() {
     resolver: zodResolver(loginSchema),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit: SubmitHandler<LoginSchemaType> = async values => {
+    setIsLoading(true);
+
     const status = await signIn('sign-in', {
       redirect: false,
       email: values.email,
       password: values.password,
     });
 
-    console.log(status);
+    setIsLoading(false);
+
     if (status?.ok) router.push('/dashboard');
   };
 
@@ -95,7 +102,10 @@ export default function Home() {
               Forget password
             </Link>
           </div>
-          <Button type="submit">Sign in</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader size="sm" className="mr-2" />}
+            Sign in
+          </Button>
           <h3 className="text-center text-sm font-medium">
             Don&apos;t have an account?{' '}
             <Link href={'/signup'} className="text-blue-500">
