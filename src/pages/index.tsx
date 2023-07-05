@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { Button, Input } from '@/components/ui';
 import { Loader } from '@/components/ui/loader';
+import { toast } from 'sonner';
 
 export const loginSchema = z.object({
   email: z
@@ -48,6 +49,8 @@ export default function Home() {
     setIsLoading(false);
 
     if (status?.ok) router.push('/dashboard');
+
+    toast.error(status?.error);
   };
 
   return (

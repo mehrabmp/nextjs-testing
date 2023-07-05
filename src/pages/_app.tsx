@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'sonner';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -16,6 +17,7 @@ export default function App({
     <main className={`${inter.variable} font-sans`}>
       <SessionProvider session={session}>
         <Component {...pageProps} />
+        <Toaster position="bottom-center" richColors closeButton />
       </SessionProvider>
     </main>
   );

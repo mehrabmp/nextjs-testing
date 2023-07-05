@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { Button, Input } from '@/components/ui';
 import { Loader } from '@/components/ui/loader';
+import { toast } from 'sonner';
 
 export const signupSchema = z.object({
   name: z.string().nonempty('Please enter your name'),
@@ -51,6 +52,8 @@ export default function Signup() {
     setIsLoading(false);
 
     if (status?.ok) router.push('/dashboard');
+
+    toast.error(status?.error);
   };
 
   return (
