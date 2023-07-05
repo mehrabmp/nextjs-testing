@@ -11,8 +11,7 @@ import { Button, Input } from '@/components/ui';
 import { Loader } from '@/components/ui/loader';
 import { toast } from 'sonner';
 
-export const signupSchema = z.object({
-  name: z.string().nonempty('Please enter your name'),
+export const loginSchema = z.object({
   email: z
     .string()
     .nonempty('Please enter email address')
@@ -24,26 +23,25 @@ export const signupSchema = z.object({
     .max(50, `Password can't be more than 50 characters long`),
 });
 
-type SignupSchemaType = z.infer<typeof signupSchema>;
+type LoginSchemaType = z.infer<typeof loginSchema>;
 
-export default function Signup() {
+export default function Signin() {
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupSchemaType>({
-    resolver: zodResolver(signupSchema),
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit: SubmitHandler<SignupSchemaType> = async values => {
+  const onSubmit: SubmitHandler<LoginSchemaType> = async values => {
     setIsLoading(true);
 
-    const status = await signIn('sign-up', {
+    const status = await signIn('sign-in', {
       redirect: false,
-      name: values.name,
       email: values.email,
       password: values.password,
     });
@@ -65,23 +63,13 @@ export default function Signup() {
       </Head>
       <div className="flex min-h-screen flex-col items-center justify-center p-5">
         <div className="mb-10 flex flex-col items-center justify-center space-y-1">
-          <h1 className="text-4xl font-medium">Sign up</h1>
+          <h1 className="text-4xl font-medium">Welcome back</h1>
+          <h2 className="font-normal">Please enter your details.</h2>
         </div>
         <form
-          className="w-full max-w-xs space-y-4"
+          className="w-full max-w-xs space-y-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="space-y-1">
-            <label htmlFor="name" className="text-sm font-medium">
-              Name
-            </label>
-            <Input
-              id="name"
-              placeholder="Enter your name"
-              error={errors.name && errors.name.message}
-              {...register('name')}
-            />
-          </div>
           <div className="space-y-1">
             <label htmlFor="email" className="text-sm font-medium">
               Email
@@ -104,14 +92,27 @@ export default function Signup() {
               {...register('password')}
             />
           </div>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2">
+              <Input
+                type="checkbox"
+                id="remember"
+                className="h-4 w-4 rounded border-gray-300 focus:ring-blue-700"
+              />
+              <label htmlFor="remember">Remember me</label>
+            </div>
+            <Link href={'/'} className="font-medium text-blue-500">
+              Forget password
+            </Link>
+          </div>
           <Button type="submit" disabled={isLoading}>
             {isLoading && <Loader size="sm" className="mr-2" />}
-            Sign up
+            Sign in
           </Button>
           <h3 className="text-center text-sm font-medium">
-            You have already an account?{' '}
-            <Link href={'/signin'} className="text-blue-500">
-              Sign in
+            Don&apos;t have an account?{' '}
+            <Link href={'/signup'} className="text-blue-500">
+              Sign up
             </Link>
           </h3>
         </form>
