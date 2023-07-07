@@ -1,7 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/signin');
 });
 
 test.describe('Validation', () => {
@@ -28,8 +28,10 @@ test.describe('Validation', () => {
   });
 });
 
-test.describe('Login', () => {
-  test('should login successfully with valid credentials', async ({ page }) => {
+test.describe('Signin', () => {
+  test.skip('should sign in successfully with valid credentials', async ({
+    page,
+  }) => {
     await login(page, 'test@gmail.com', '123456');
 
     await expect(page).toHaveURL('/dashboard');

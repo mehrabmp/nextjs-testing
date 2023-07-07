@@ -163,6 +163,8 @@ const FormMessage = React.forwardRef<
         'text-[0.8rem] font-medium text-red-500 dark:text-red-900',
         className
       )}
+      data-testid="error-message"
+      data-cy="error-message"
       {...props}
     >
       {body}
