@@ -7,18 +7,25 @@ import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import { Button, Input } from '@/components/ui';
-import { Loader } from '@/components/ui/loader';
 import { toast } from 'sonner';
+import { Loader } from '@/components/ui/loader';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export const loginSchema = z.object({
   email: z
-    .string()
-    .nonempty('Please enter email address')
+    .string({ required_error: 'Please enter email address' })
     .email('Please enter valid email address'),
   password: z
-    .string()
-    .nonempty('Please enter password')
+    .string({ required_error: 'Please enter password' })
     .min(6, `Password must be at least 6 characters long`)
     .max(50, `Password can't be more than 50 characters long`),
 });
@@ -27,15 +34,12 @@ type LoginSchemaType = z.infer<typeof loginSchema>;
 
 export default function Signin() {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginSchemaType>({
-    resolver: zodResolver(loginSchema),
-  });
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const onSubmit: SubmitHandler<LoginSchemaType> = async values => {
     setIsLoading(true);
@@ -61,61 +65,61 @@ export default function Signin() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex min-h-screen flex-col items-center justify-center p-5">
-        <div className="mb-10 flex flex-col items-center justify-center space-y-1">
-          <h1 className="text-4xl font-medium">Welcome back</h1>
-          <h2 className="font-normal">Please enter your details.</h2>
+      <div className="flex min-h-screen flex-col items-center p-4">
+        <div className="mb-16 mt-32 text-center">
+          <h1 className="text-4xl font-medium">Sign in</h1>
         </div>
-        <form
-          className="w-full max-w-xs space-y-6"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="space-y-1">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <Input
-              id="email"
-              placeholder="Enter your email"
-              error={errors.email && errors.email.message}
-              {...register('email')}
+        <Form {...form}>
+          <form
+            className="w-full max-w-xs space-y-4"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your email"
+                      error={!!form.formState.errors.email}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-1">
-            <label htmlFor="password" className="text-sm font-medium">
-              Password
-            </label>
-            <Input
-              id="password"
-              placeholder="Enter your password"
-              error={errors.password && errors.password.message}
-              {...register('password')}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your password"
+                      error={!!form.formState.errors.password}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2">
-              <Input
-                type="checkbox"
-                id="remember"
-                className="h-4 w-4 rounded border-gray-300 focus:ring-blue-700"
-              />
-              <label htmlFor="remember">Remember me</label>
-            </div>
-            <Link href={'/'} className="font-medium text-blue-500">
-              Forget password
-            </Link>
-          </div>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading && <Loader size="sm" className="mr-2" />}
-            Sign in
-          </Button>
-          <h3 className="text-center text-sm font-medium">
-            Don&apos;t have an account?{' '}
-            <Link href={'/signup'} className="text-blue-500">
-              Sign up
-            </Link>
-          </h3>
-        </form>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && <Loader size="sm" className="mr-2" />}
+              Sign in
+            </Button>
+            <h2 className="text-center text-sm font-medium">
+              Don&apos;t have an account?{' '}
+              <Link href={'/signup'} className="text-blue-500">
+                Sign up
+              </Link>
+            </h2>
+          </form>
+        </Form>
       </div>
     </>
   );
