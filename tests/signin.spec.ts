@@ -28,8 +28,26 @@ test.describe('Validation', () => {
   });
 });
 
+test.describe('Navigations', () => {
+  test('should navigate to sign up page when clicking on the sign up link', async ({
+    page,
+  }) => {
+    await page.getByRole('link', { name: 'Sign up' }).click();
+
+    await expect(page).toHaveURL('/signup');
+  });
+});
+
 test.describe('Signin', () => {
-  test.skip('should sign in successfully with valid credentials', async ({
+  test('should display error message when signing in with invalid credentials', async ({
+    page,
+  }) => {
+    await login(page, 'test@gmail.com', '123123123123');
+
+    await expect(page.getByText('Invalid email or password')).toBeVisible();
+  });
+
+  test('should sign in successfully with valid credentials', async ({
     page,
   }) => {
     await login(page, 'test@gmail.com', '123456');
