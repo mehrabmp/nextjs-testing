@@ -44,7 +44,7 @@ test.describe('Signup', () => {
   test('should display error message when user already exists', async ({
     page,
   }) => {
-    await signup(page, 'Mehrab', 'test@gmail.com', '123456');
+    await signup(page, 'test', 'test@gmail.com', '123456');
 
     await expect(page.getByText('User already exists')).toBeVisible();
   });
@@ -52,7 +52,7 @@ test.describe('Signup', () => {
   test('should sign up successfully with valid credentials', async ({
     page,
   }) => {
-    await signup(page, 'Mehrab', 'mehrabii@gmail.com', '123456');
+    await signup(page, 'test', 'test2@gmail.com', '123456');
 
     await expect(page).toHaveURL('/dashboard');
   });
